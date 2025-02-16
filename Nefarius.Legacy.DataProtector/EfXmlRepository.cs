@@ -16,6 +16,7 @@ public class EfXmlRepository : IXmlRepository
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<XElement> GetAllElements()
     {
         using var context = _contextFactory();
@@ -24,6 +25,7 @@ public class EfXmlRepository : IXmlRepository
             .ToList();
     }
 
+    /// <inheritdoc />
     public void StoreElement(XElement element, string friendlyName)
     {
         using var context = _contextFactory();
