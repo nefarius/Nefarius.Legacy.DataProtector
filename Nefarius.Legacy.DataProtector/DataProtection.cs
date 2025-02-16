@@ -1,9 +1,9 @@
 ﻿// ReSharper disable RedundantUsingDirective
+// ReSharper disable UnusedType.Global
 using System;
 using System.ComponentModel.DataAnnotations;
 #if NETFRAMEWORK
 using System.Data.Entity;
-// ReSharper disable UnusedType.Global
 #endif
 #if NETCOREAPP
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,7 @@ public class DataProtectionKey
     [MaxLength(200)]
     public string Id { get; set; } = string.Empty;
 
+    [MaxLength(4096)]
     public string XmlData { get; set; } = string.Empty;
 
     public DateTime LastModified { get; set; } = DateTime.UtcNow;
