@@ -9,6 +9,11 @@ key store using EF (Legacy and Core).
 
 ## Usage
 
+The main advantage is getting SSO via shared cookies to work while not relying on a shared directory, but SQL database
+instead.
+The example below assumes you have an ASP.NET Core backend playing reverse proxy to a legacy ASP.NET 4.x app
+and share the user session via cookie that gets decrypted via the DB-backed keys.
+
 ### ASP.NET Core (.NET 8)
 
 ```csharp
