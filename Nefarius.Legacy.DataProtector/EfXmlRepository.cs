@@ -25,7 +25,9 @@ public class EfXmlRepository : IXmlRepository
         _logger?.LogDebug("Getting all elements");
         using var context = _contextFactory();
         return context.DataProtectionKeys
-            .Select(k => XElement.Parse(k.XmlData))
+            .Select(k => k.XmlData)
+            .ToList()
+            .Select(XElement.Parse)
             .ToList();
     }
 

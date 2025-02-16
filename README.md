@@ -12,15 +12,12 @@ key store using EF (Legacy and Core).
 ### ASP.NET Core (.NET 8)
 
 ```csharp
-services.AddDbContext<DataProtectionDbContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataProtectionDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DataProtection")));
 
-services.AddDataProtection()
-    .PersistKeysToRepository(new EfXmlRepository(() => new DataProtectionDbContext(
-        new DbContextOptionsBuilder<DataProtectionDbContext>()
-            .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            .Options
-    )));
+builder.Services.AddDataProtection()
+    .PersistKeysToSqlServer(builder.Configuration.GetConnectionString("DataProtection")!)    
+    .SetApplicationName("iis-app-name");
 ```
 
 ### ASP.NET 4 (.NET Framework)
