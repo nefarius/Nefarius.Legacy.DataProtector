@@ -17,7 +17,7 @@ public static class DataProtectionBuilderExtensions
     /// <summary>
     ///     Registers the <see cref="EfXmlRepository"/> using EF Core.
     /// </summary>
-    public static IDataProtectionBuilder PersistKeysToFileSystem(this IDataProtectionBuilder builder,
+    public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
         string connectionString)
     {
         builder.AddKeyManagementOptions(options =>
