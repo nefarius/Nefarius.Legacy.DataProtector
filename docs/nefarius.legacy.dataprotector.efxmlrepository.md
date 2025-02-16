@@ -11,15 +11,17 @@ Implements IXmlRepository
 
 ## Constructors
 
-### <a id="constructors-.ctor"/>**EfXmlRepository(Func&lt;DataProtectionDbContext&gt;)**
+### <a id="constructors-.ctor"/>**EfXmlRepository(Func&lt;DataProtectionDbContext&gt;, ILoggerFactory)**
 
 ```csharp
-public EfXmlRepository(Func<DataProtectionDbContext> contextFactory)
+public EfXmlRepository(Func<DataProtectionDbContext> contextFactory, ILoggerFactory loggerFactory)
 ```
 
 #### Parameters
 
 `contextFactory` [Func&lt;DataProtectionDbContext&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.func-1)<br>
+
+`loggerFactory` ILoggerFactory<br>
 
 ## Methods
 
