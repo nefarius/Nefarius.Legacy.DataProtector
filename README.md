@@ -1,4 +1,4 @@
-# Nefarius.Legacy.DataProtector
+# <img src="assets/NSS-128x128.png" align="left" />Nefarius.Legacy.DataProtector
 
 ## Usage
 
