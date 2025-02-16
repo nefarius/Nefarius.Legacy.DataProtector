@@ -108,6 +108,10 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
 });
 ```
 
+## Documentation
+
+[Link to API docs](docs/index.md).
+
 ## Sources & 3rd party credits
 
 - [Key storage providers in ASP.NET Core / Entity Framework Core](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers?view=aspnetcore-8.0&tabs=visual-studio#entity-framework-core)
