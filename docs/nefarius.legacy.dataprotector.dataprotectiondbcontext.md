@@ -2,6 +2,8 @@
 
 Namespace: Nefarius.Legacy.DataProtector
 
+Data protection database context.
+
 ```csharp
 public class DataProtectionDbContext : Microsoft.EntityFrameworkCore.DbContext, Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure`1[[System.IServiceProvider, System.ComponentModel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies, Microsoft.EntityFrameworkCore.Internal.IDbSetCache, Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable, Microsoft.EntityFrameworkCore.Infrastructure.IResettableService, System.IDisposable, System.IAsyncDisposable
 ```
@@ -42,6 +44,8 @@ public DatabaseFacade Database { get; }
 DatabaseFacade<br>
 
 ### <a id="properties-dataprotectionkeys"/>**DataProtectionKeys**
+
+The key entries in the DB.
 
 ```csharp
 public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
