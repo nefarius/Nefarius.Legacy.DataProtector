@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,12 +20,11 @@ public static class SqlDataProtectionProvider
     /// </summary>
     /// <param name="connectionString">The SQL Server connection string.</param>
     /// <param name="applicationName">Sets the unique name of this application within the data protection system.</param>
-    /// <returns></returns>
     public static IDataProtectionProvider Create(string connectionString, string applicationName)
     {
         return DataProtectionProvider.Create(
             new DirectoryInfo(
-                /* NOTE: this is just to avoid Argument(Null)Exception, the value not used */
+                /* NOTE: this is just to avoid Argument(Null)Exception, the value is not used */
                 Path.GetTempPath()
             ),
             builder =>

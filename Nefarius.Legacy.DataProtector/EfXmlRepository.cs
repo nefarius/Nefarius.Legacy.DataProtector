@@ -1,10 +1,12 @@
 ﻿// ReSharper disable UnusedType.Global
+
+using System.Xml.Linq;
+
+using Microsoft.AspNetCore.DataProtection.Repositories;
+using Microsoft.Extensions.Logging;
 #if NETFRAMEWORK
 using System.Data.Entity;
 #endif
-using System.Xml.Linq;
-using Microsoft.AspNetCore.DataProtection.Repositories;
-using Microsoft.Extensions.Logging;
 
 namespace Nefarius.Legacy.DataProtector;
 
@@ -23,7 +25,7 @@ public class EfXmlRepository : IXmlRepository
     public IReadOnlyCollection<XElement> GetAllElements()
     {
         _logger?.LogDebug("Getting all elements");
-        using var context = _contextFactory();
+        using DataProtectionDbContext? context = _contextFactory();
         return context.DataProtectionKeys
             .Select(k => k.XmlData)
             .ToList()
@@ -35,9 +37,9 @@ public class EfXmlRepository : IXmlRepository
     public void StoreElement(XElement element, string friendlyName)
     {
         _logger?.LogDebug($"Storing element {friendlyName}.");
-        
-        using var context = _contextFactory();
-        var keyEntry = context.DataProtectionKeys.Find(friendlyName);
+
+        using DataProtectionDbContext? context = _contextFactory();
+        DataProtectionKey? keyEntry = context.DataProtectionKeys.Find(friendlyName);
 
         if (keyEntry == null)
         {
@@ -57,7 +59,7 @@ public class EfXmlRepository : IXmlRepository
         }
 
         context.SaveChanges();
-        
+
         _logger?.LogDebug($"Stored element {friendlyName}.");
     }
 }

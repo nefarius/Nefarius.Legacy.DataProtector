@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.AspNetCore.DataProtection;
 #if NETCOREAPP
 using Microsoft.EntityFrameworkCore;
@@ -33,14 +34,14 @@ public static class DataProtectionBuilderExtensions
 
 #if NETCOREAPP
 /// <summary>
-///     <see cref="IDataProtectionBuilder"/> extensions.
+///     <see cref="IDataProtectionBuilder" /> extensions.
 /// </summary>
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 public static class DataProtectionBuilderExtensions
 {
     /// <summary>
-    ///     Registers the <see cref="EfXmlRepository"/> using EF Core.
+    ///     Registers the <see cref="EfXmlRepository" /> using EF Core.
     /// </summary>
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
         string connectionString)

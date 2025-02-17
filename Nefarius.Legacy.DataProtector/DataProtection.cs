@@ -1,10 +1,12 @@
 ﻿// ReSharper disable RedundantUsingDirective
 // ReSharper disable UnusedType.Global
+
 using System;
 using System.ComponentModel.DataAnnotations;
 #if NETFRAMEWORK
 using System.Data.Entity;
 #endif
+
 #if NETCOREAPP
 using Microsoft.EntityFrameworkCore;
 #endif
