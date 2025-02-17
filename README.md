@@ -78,28 +78,7 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
     ExpireTimeSpan = TimeSpan.FromMinutes(120),
     TicketDataFormat = new AspNetTicketDataFormat(
         new DataProtectorShim(
-            DataProtectionProvider.Create(
-                    new DirectoryInfo(
-                        /* NOTE: this is just to avoid Argument(Null)Exception, the value not used */
-                        Path.GetTempPath()
-                    ),
-                    builder =>
-                    {
-                        // keep in sync with core backend
-                        builder.SetApplicationName("iis-app-name");
-                        // use DB via EF instead of directory
-                        builder.Services.Configure<KeyManagementOptions>(options =>
-                        {
-                            ILoggerFactory loggerFactory = LoggerFactory.Create(lfb =>
-                            {
-                                lfb.AddDebug(); // Logs to Debug.WriteLine
-                            });
-
-                            options.XmlRepository = new EfXmlRepository(
-                                () => new DataProtectionDbContext(connectionString),
-                                loggerFactory);
-                        });
-                    })
+            SqlDataProtectionProvider.Create(connectionString, "iis-app-name")
                 .CreateProtector(
                     "Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",
                     "Cookies",
