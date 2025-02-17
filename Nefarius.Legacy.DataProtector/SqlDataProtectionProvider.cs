@@ -19,7 +19,7 @@ public static class SqlDataProtectionProvider
     ///     at which to store keys.
     /// </summary>
     /// <param name="connectionString">The SQL Server connection string.</param>
-    /// <param name="applicationName">Sets the unique name of this application within the data protection system.</param>
+    /// <param name="applicationName">The unique name of this application within the data protection system.</param>
     public static IDataProtectionProvider Create(string connectionString, string applicationName)
     {
         return DataProtectionProvider.Create(
