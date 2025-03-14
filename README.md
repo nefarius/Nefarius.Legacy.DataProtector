@@ -25,7 +25,7 @@ details.
 is used to offload encryption and decryption, and the key material can be shared by a common filesystem directory or
 other means.
 
-Since I already had to deal with EF (Core) ad an MS SQL Server, I chose to backport an EF-based SQL Server backed key
+Since I already had to deal with EF (Core) and an MS SQL Server, I chose to backport an EF-based SQL Server backed key
 repository consumable both in ASP.NET Classic and Core from a single class library.
 
 ## Usage
