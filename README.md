@@ -89,6 +89,9 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
 });
 ```
 
+> [!IMPORTANT]
+> The values `.AspNet.SharedCookie` and `iis-app-name` used here need to match across projects!
+
 ## Documentation
 
 [Link to API docs](docs/index.md).
