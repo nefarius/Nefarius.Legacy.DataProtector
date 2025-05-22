@@ -64,6 +64,8 @@ builder.Services.AddAuthentication(options =>
 
 ### ASP.NET 4 (.NET Framework)
 
+If your web app doesn't yet use OWIN you [need to add it first](https://learn.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/getting-started-with-owin-and-katana) ([video guide](https://www.youtube.com/watch?v=q5Tb5zZelxc&t=13s)) for this example to work!
+
 ```csharp
 // assumes OwinStartup is used
 
