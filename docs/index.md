@@ -7,3 +7,5 @@
 - [DataProtectionDbContext](./nefarius.legacy.dataprotector.dataprotectiondbcontext.md)
 
 - [DataProtectionKey](./nefarius.legacy.dataprotector.dataprotectionkey.md)
+
+- [ServiceCollectionExtensions](./nefarius.legacy.dataprotector.servicecollectionextensions.md)
