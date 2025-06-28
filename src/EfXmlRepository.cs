@@ -80,17 +80,17 @@ internal class EfXmlRepository : IXmlRepository
 
     private static void EnsureDataProtectionKeysTableExists(DataProtectionDbContext context)
     {
-        const string createTableSql = """
+        const string createTableSql = $"""
 
-                                      IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'DataProtectionKeys')
-                                      BEGIN
-                                          CREATE TABLE [DataProtectionKeys] (
-                                              [Id] int NOT NULL PRIMARY KEY IDENTITY,
-                                              [FriendlyName] nvarchar(256) NOT NULL,
-                                              [Xml] nvarchar(max) NOT NULL
-                                          )
-                                      END
-                                      """;
+                                       IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{nameof(context.DataProtectionKeys)}')
+                                       BEGIN
+                                           CREATE TABLE [{nameof(context.DataProtectionKeys)}] (
+                                               [Id] int NOT NULL PRIMARY KEY IDENTITY,
+                                               [FriendlyName] nvarchar(256) NOT NULL,
+                                               [Xml] nvarchar(max) NOT NULL
+                                           )
+                                       END
+                                       """;
 
         try
         {
