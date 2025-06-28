@@ -28,8 +28,8 @@
 
     <!-- ASP.NET Core -->
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />                
-        <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />                
+        <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />                        
     </ItemGroup>
 
 </Project>
