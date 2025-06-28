@@ -1,9 +1,9 @@
-﻿using System.Data;
-using System.Data.Common;
+﻿using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.AspNetCore.DataProtection;
 #if NETCOREAPP
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 #endif
 
@@ -23,18 +23,12 @@ public static class DataProtectionBuilderExtensions
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
         string connectionString, bool ensureTableExists = true)
     {
-        DataProtectionDbContext context = new(connectionString);
-
         if (ensureTableExists)
         {
-            // Explicitly open connection before doing anything else
-            DbConnection conn = context.Database.Connection;
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
+            using var connection = new SqlConnection(connectionString);
+            connection.Open();
 
-            using DbCommand command = conn.CreateCommand();
+            using var command = connection.CreateCommand();
             command.CommandText = """
                                       IF NOT EXISTS (
                                           SELECT * FROM INFORMATION_SCHEMA.TABLES 
@@ -50,10 +44,11 @@ public static class DataProtectionBuilderExtensions
                                   """;
             command.ExecuteNonQuery();
         }
-
+        
         builder.AddKeyManagementOptions(options =>
         {
-            options.XmlRepository = new EfXmlRepository(() => context);
+           options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(connectionString
+            ));
         });
 
         return builder;
@@ -75,22 +70,12 @@ public static class DataProtectionBuilderExtensions
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
         string connectionString, bool ensureTableExists = true)
     {
-        DataProtectionDbContext context = new(
-            new DbContextOptionsBuilder<DataProtectionDbContext>()
-                .UseSqlServer(connectionString)
-                .Options
-        );
-
         if (ensureTableExists)
         {
-            // Explicitly open connection before doing anything else
-            DbConnection conn = context.Database.GetDbConnection();
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
+            using var connection = new SqlConnection(connectionString);
+            connection.Open();
 
-            using DbCommand command = conn.CreateCommand();
+            using var command = connection.CreateCommand();
             command.CommandText = """
                                       IF NOT EXISTS (
                                           SELECT * FROM INFORMATION_SCHEMA.TABLES 
@@ -109,7 +94,11 @@ public static class DataProtectionBuilderExtensions
 
         builder.AddKeyManagementOptions(options =>
         {
-            options.XmlRepository = new EfXmlRepository(() => context);
+            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(
+                new DbContextOptionsBuilder<DataProtectionDbContext>()
+                    .UseSqlServer(connectionString)
+                    .Options
+            ));
         });
 
         return builder;
