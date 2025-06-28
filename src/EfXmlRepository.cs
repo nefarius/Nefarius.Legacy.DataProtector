@@ -23,11 +23,26 @@ internal class EfXmlRepository : IXmlRepository
 {
     private readonly Func<DataProtectionDbContext> _contextFactory;
     private readonly ILogger? _logger;
+    
+    private static bool _tableEnsured = false;
+    private static readonly object EnsureLock = new();
 
     internal EfXmlRepository(Func<DataProtectionDbContext> contextFactory, ILoggerFactory? loggerFactory = null)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         _logger = loggerFactory?.CreateLogger<EfXmlRepository>();
+        
+        lock (EnsureLock)
+        {
+            if (_tableEnsured)
+            {
+                return;
+            }
+
+            using var context = _contextFactory();
+            EnsureDataProtectionKeysTableExists(context);
+            _tableEnsured = true;
+        }
     }
 
     /// <inheritdoc />
@@ -35,9 +50,6 @@ internal class EfXmlRepository : IXmlRepository
     {
         _logger?.LogDebug("Getting all elements");
         using DataProtectionDbContext? context = _contextFactory();
-
-        EnsureDataProtectionKeysTableExists(context);
-
         return context.DataProtectionKeys
             .Select(k => k.XmlData)
             .ToList()
@@ -51,9 +63,6 @@ internal class EfXmlRepository : IXmlRepository
         _logger?.LogDebug("Storing element {FriendlyName}.", friendlyName);
 
         using DataProtectionDbContext? context = _contextFactory();
-
-        EnsureDataProtectionKeysTableExists(context);
-
         DataProtectionKey? keyEntry = context.DataProtectionKeys.Find(friendlyName);
 
         if (keyEntry == null)
