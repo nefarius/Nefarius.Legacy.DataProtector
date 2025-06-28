@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 #if NETFRAMEWORK
 using System.Data.Entity;
 #endif
@@ -28,6 +29,7 @@ public class DataProtectionKey
     /// <summary>
     ///     Key XML blob.
     /// </summary>
+    [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
     public string XmlData { get; set; } = string.Empty;
 
     /// <summary>
