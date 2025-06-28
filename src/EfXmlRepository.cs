@@ -10,12 +10,15 @@ using System.Data.Entity;
 
 namespace Nefarius.Legacy.DataProtector;
 
-public class EfXmlRepository : IXmlRepository
+/// <summary>
+///     The XML repository backed by Entity Framework.
+/// </summary>
+internal class EfXmlRepository : IXmlRepository
 {
     private readonly Func<DataProtectionDbContext> _contextFactory;
     private readonly ILogger? _logger;
 
-    public EfXmlRepository(Func<DataProtectionDbContext> contextFactory, ILoggerFactory? loggerFactory = null)
+    internal EfXmlRepository(Func<DataProtectionDbContext> contextFactory, ILoggerFactory? loggerFactory = null)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         _logger = loggerFactory?.CreateLogger<EfXmlRepository>();
@@ -36,7 +39,7 @@ public class EfXmlRepository : IXmlRepository
     /// <inheritdoc />
     public void StoreElement(XElement element, string friendlyName)
     {
-        _logger?.LogDebug($"Storing element {friendlyName}.");
+        _logger?.LogDebug("Storing element {FriendlyName}.", friendlyName);
 
         using DataProtectionDbContext? context = _contextFactory();
         DataProtectionKey? keyEntry = context.DataProtectionKeys.Find(friendlyName);
@@ -60,6 +63,6 @@ public class EfXmlRepository : IXmlRepository
 
         context.SaveChanges();
 
-        _logger?.LogDebug($"Stored element {friendlyName}.");
+        _logger?.LogDebug("Stored element {FriendlyName}.", friendlyName);
     }
 }

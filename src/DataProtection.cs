@@ -42,12 +42,13 @@ public class DataProtectionKey
 /// </summary>
 public class DataProtectionDbContext : DbContext
 {
+    /// <inheritdoc />
     public DataProtectionDbContext(string connectionString) : base(connectionString) { }
 
     /// <summary>
     ///     The key entries in the DB.
     /// </summary>
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 }
 #endif
 
@@ -57,6 +58,7 @@ public class DataProtectionDbContext : DbContext
 /// </summary>
 public class DataProtectionDbContext : DbContext
 {
+    /// <inheritdoc />
     public DataProtectionDbContext(DbContextOptions<DataProtectionDbContext> options)
         : base(options) { }
 
