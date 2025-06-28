@@ -35,6 +35,9 @@ instead.
 The example below assumes you have an ASP.NET Core backend playing reverse proxy to a legacy ASP.NET 4.x app
 and share the user session via cookie that gets decrypted via the DB-backed keys.
 
+> [!CAUTION]
+> The table name `DataProtectionKeys` is hard-coded and will be created automatically if missing. Make sure, that your DB does not already have a table with that name and different schema or an exception will be thrown.
+
 ### ASP.NET Core (.NET 8)
 
 ```csharp
