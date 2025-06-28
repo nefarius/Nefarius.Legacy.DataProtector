@@ -12,26 +12,12 @@ Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) 
 
 ## Methods
 
-### <a id="methods-ensuredataprotectionkeystable"/>**EnsureDataProtectionKeysTable(IDataProtectionBuilder)**
-
-```csharp
-public static IDataProtectionBuilder EnsureDataProtectionKeysTable(IDataProtectionBuilder builder)
-```
-
-#### Parameters
-
-`builder` IDataProtectionBuilder<br>
-
-#### Returns
-
-IDataProtectionBuilder
-
-### <a id="methods-persistkeystosqlserver"/>**PersistKeysToSqlServer(IDataProtectionBuilder, String)**
+### <a id="methods-persistkeystosqlserver"/>**PersistKeysToSqlServer(IDataProtectionBuilder, String, Boolean)**
 
 Registers the [EfXmlRepository](./nefarius.legacy.dataprotector.efxmlrepository.md) using EF Core.
 
 ```csharp
-public static IDataProtectionBuilder PersistKeysToSqlServer(IDataProtectionBuilder builder, string connectionString)
+public static IDataProtectionBuilder PersistKeysToSqlServer(IDataProtectionBuilder builder, string connectionString, bool ensureTableExists)
 ```
 
 #### Parameters
@@ -39,6 +25,8 @@ public static IDataProtectionBuilder PersistKeysToSqlServer(IDataProtectionBuild
 `builder` IDataProtectionBuilder<br>
 
 `connectionString` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+
+`ensureTableExists` [Boolean](https://docs.microsoft.com/en-us/dotnet/api/system.boolean)<br>
 
 #### Returns
 
