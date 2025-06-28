@@ -78,7 +78,7 @@ internal class EfXmlRepository : IXmlRepository
         _logger?.LogDebug("Stored element {FriendlyName}.", friendlyName);
     }
 
-    private static void EnsureDataProtectionKeysTableExists(DataProtectionDbContext context)
+    private void EnsureDataProtectionKeysTableExists(DataProtectionDbContext context)
     {
         const string createTableSql = $"""
 
@@ -100,9 +100,9 @@ internal class EfXmlRepository : IXmlRepository
             context.Database.ExecuteSqlRaw(createTableSql);
 #endif
         }
-        catch (DbException)
+        catch (DbException ex)
         {
-            // ignored
+            _logger?.LogError(ex, "Could not create data protection keys table.");
         }
     }
 }
