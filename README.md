@@ -35,6 +35,10 @@ instead.
 The example below assumes you have an ASP.NET Core backend playing reverse proxy to a legacy ASP.NET 4.x app
 and share the user session via cookie that gets decrypted via the DB-backed keys.
 
+> [!CAUTION]
+> The table name `DataProtectionKeys` is hard-coded and will be created automatically if missing.
+> Ensure that your DB does not already have a table with that name and different schema or an exception will be thrown.
+
 ### ASP.NET Core (.NET 8)
 
 ```csharp
@@ -64,7 +68,9 @@ builder.Services.AddAuthentication(options =>
 
 ### ASP.NET 4 (.NET Framework)
 
-If your web app doesn't yet use OWIN you [need to add it first](https://learn.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/getting-started-with-owin-and-katana) ([video guide](https://www.youtube.com/watch?v=q5Tb5zZelxc&t=13s)) for this example to work!
+If your web app doesn't yet use OWIN
+you [need to add it first](https://learn.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/getting-started-with-owin-and-katana) ([video guide](https://www.youtube.com/watch?v=q5Tb5zZelxc&t=13s))
+for this example to work!
 
 ```csharp
 // assumes OwinStartup is used
@@ -90,7 +96,8 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
 ```
 
 > [!IMPORTANT]
-> The values `.AspNet.SharedCookie` and `iis-app-name` used here need to match across projects!
+> The values `.AspNet.SharedCookie` and `iis-app-name` used here need to match across web projects that share the same
+> cookie(s)!
 
 ## Documentation
 
