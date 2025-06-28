@@ -3,7 +3,6 @@ using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.DependencyInjection;
 #if NETCOREAPP
 using Microsoft.EntityFrameworkCore;
 #endif
@@ -22,47 +21,40 @@ public static class DataProtectionBuilderExtensions
     ///     Registers the <see cref="EfXmlRepository" /> using EF 6.
     /// </summary>
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
-        string connectionString)
+        string connectionString, bool ensureTableExists = true)
     {
-        builder.AddKeyManagementOptions(options =>
+        DataProtectionDbContext context = new(connectionString);
+
+        if (ensureTableExists)
         {
-            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(connectionString
-            ));
-        });
+            // Explicitly open connection before doing anything else
+            DbConnection conn = context.Database.Connection;
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
 
-        return builder;
-    }
-    
-    public static IDataProtectionBuilder EnsureDataProtectionKeysTable(this IDataProtectionBuilder builder)
-    {
-        IServiceCollection services = builder.Services;
-
-        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
-
-        DataProtectionDbContext context = scope.ServiceProvider.GetRequiredService<DataProtectionDbContext>();
-
-        // Explicitly open connection before doing anything else
-        DbConnection conn = context.Database.Connection;
-        if (conn.State != ConnectionState.Open)
-        {
-            conn.Open();
+            using DbCommand command = conn.CreateCommand();
+            command.CommandText = """
+                                      IF NOT EXISTS (
+                                          SELECT * FROM INFORMATION_SCHEMA.TABLES 
+                                          WHERE TABLE_NAME = 'DataProtectionKeys' AND TABLE_SCHEMA = 'dbo'
+                                      )
+                                      BEGIN
+                                          CREATE TABLE [dbo].[DataProtectionKeys] (
+                                              [Id] INT IDENTITY PRIMARY KEY,
+                                              [FriendlyName] NVARCHAR(256) NOT NULL,
+                                              [Xml] NVARCHAR(MAX) NOT NULL
+                                          )
+                                      END
+                                  """;
+            command.ExecuteNonQuery();
         }
 
-        using DbCommand command = conn.CreateCommand();
-        command.CommandText = """
-                                  IF NOT EXISTS (
-                                      SELECT * FROM INFORMATION_SCHEMA.TABLES 
-                                      WHERE TABLE_NAME = 'DataProtectionKeys' AND TABLE_SCHEMA = 'dbo'
-                                  )
-                                  BEGIN
-                                      CREATE TABLE [dbo].[DataProtectionKeys] (
-                                          [Id] INT IDENTITY PRIMARY KEY,
-                                          [FriendlyName] NVARCHAR(256) NOT NULL,
-                                          [Xml] NVARCHAR(MAX) NOT NULL
-                                      )
-                                  END
-                              """;
-        command.ExecuteNonQuery();
+        builder.AddKeyManagementOptions(options =>
+        {
+            options.XmlRepository = new EfXmlRepository(() => context);
+        });
 
         return builder;
     }
@@ -81,50 +73,44 @@ public static class DataProtectionBuilderExtensions
     ///     Registers the <see cref="EfXmlRepository" /> using EF Core.
     /// </summary>
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
-        string connectionString)
+        string connectionString, bool ensureTableExists = true)
     {
-        builder.AddKeyManagementOptions(options =>
+        DataProtectionDbContext context = new(
+            new DbContextOptionsBuilder<DataProtectionDbContext>()
+                .UseSqlServer(connectionString)
+                .Options
+        );
+
+        if (ensureTableExists)
         {
-            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(
-                new DbContextOptionsBuilder<DataProtectionDbContext>()
-                    .UseSqlServer(connectionString)
-                    .Options
-            ));
-        });
+            // Explicitly open connection before doing anything else
+            DbConnection conn = context.Database.GetDbConnection();
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
 
-        return builder;
-    }
-
-    public static IDataProtectionBuilder EnsureDataProtectionKeysTable(this IDataProtectionBuilder builder)
-    {
-        IServiceCollection services = builder.Services;
-
-        using IServiceScope scope = services.BuildServiceProvider().CreateScope();
-
-        DataProtectionDbContext context = scope.ServiceProvider.GetRequiredService<DataProtectionDbContext>();
-
-        // Explicitly open connection before doing anything else
-        DbConnection conn = context.Database.GetDbConnection();
-        if (conn.State != ConnectionState.Open)
-        {
-            conn.Open();
+            using DbCommand command = conn.CreateCommand();
+            command.CommandText = """
+                                      IF NOT EXISTS (
+                                          SELECT * FROM INFORMATION_SCHEMA.TABLES 
+                                          WHERE TABLE_NAME = 'DataProtectionKeys' AND TABLE_SCHEMA = 'dbo'
+                                      )
+                                      BEGIN
+                                          CREATE TABLE [dbo].[DataProtectionKeys] (
+                                              [Id] INT IDENTITY PRIMARY KEY,
+                                              [FriendlyName] NVARCHAR(256) NOT NULL,
+                                              [Xml] NVARCHAR(MAX) NOT NULL
+                                          )
+                                      END
+                                  """;
+            command.ExecuteNonQuery();
         }
 
-        using DbCommand command = conn.CreateCommand();
-        command.CommandText = """
-                                  IF NOT EXISTS (
-                                      SELECT * FROM INFORMATION_SCHEMA.TABLES 
-                                      WHERE TABLE_NAME = 'DataProtectionKeys' AND TABLE_SCHEMA = 'dbo'
-                                  )
-                                  BEGIN
-                                      CREATE TABLE [dbo].[DataProtectionKeys] (
-                                          [Id] INT IDENTITY PRIMARY KEY,
-                                          [FriendlyName] NVARCHAR(256) NOT NULL,
-                                          [Xml] NVARCHAR(MAX) NOT NULL
-                                      )
-                                  END
-                              """;
-        command.ExecuteNonQuery();
+        builder.AddKeyManagementOptions(options =>
+        {
+            options.XmlRepository = new EfXmlRepository(() => context);
+        });
 
         return builder;
     }
