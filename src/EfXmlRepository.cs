@@ -24,25 +24,10 @@ internal class EfXmlRepository : IXmlRepository
     private readonly Func<DataProtectionDbContext> _contextFactory;
     private readonly ILogger? _logger;
     
-    private static bool _tableEnsured = false;
-    private static readonly object EnsureLock = new();
-
     internal EfXmlRepository(Func<DataProtectionDbContext> contextFactory, ILoggerFactory? loggerFactory = null)
     {
         _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         _logger = loggerFactory?.CreateLogger<EfXmlRepository>();
-        
-        lock (EnsureLock)
-        {
-            if (_tableEnsured)
-            {
-                return;
-            }
-
-            using var context = _contextFactory();
-            EnsureDataProtectionKeysTableExists(context);
-            _tableEnsured = true;
-        }
     }
 
     /// <inheritdoc />
@@ -85,33 +70,5 @@ internal class EfXmlRepository : IXmlRepository
         context.SaveChanges();
 
         _logger?.LogDebug("Stored element {FriendlyName}.", friendlyName);
-    }
-
-    private void EnsureDataProtectionKeysTableExists(DataProtectionDbContext context)
-    {
-        const string createTableSql = $"""
-
-                                       IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{nameof(context.DataProtectionKeys)}')
-                                       BEGIN
-                                           CREATE TABLE [{nameof(context.DataProtectionKeys)}] (
-                                               [Id] int NOT NULL PRIMARY KEY IDENTITY,
-                                               [FriendlyName] nvarchar(256) NOT NULL,
-                                               [Xml] nvarchar(max) NOT NULL
-                                           )
-                                       END
-                                       """;
-
-        try
-        {
-#if NETFRAMEWORK
-            context.Database.ExecuteSqlCommand(createTableSql);
-#else
-            context.Database.ExecuteSqlRaw(createTableSql);
-#endif
-        }
-        catch (DbException ex)
-        {
-            _logger?.LogError(ex, "Could not create data protection keys table.");
-        }
     }
 }
