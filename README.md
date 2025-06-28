@@ -36,8 +36,8 @@ The example below assumes you have an ASP.NET Core backend playing reverse proxy
 and share the user session via cookie that gets decrypted via the DB-backed keys.
 
 > [!CAUTION]
-> The table name `DataProtectionKeys` is hard-coded and will be created automatically if missing.
-> Ensure that your DB does not already have a table with that name and different schema or an exception will be thrown.
+> The table name `DataProtectionKeys` is hard-coded and needs to be created in the target database.
+> See [`SQL_CreateTable.sql`](src/SQL_CreateTable.sql) for details.
 
 ### ASP.NET Core (.NET 8)
 
