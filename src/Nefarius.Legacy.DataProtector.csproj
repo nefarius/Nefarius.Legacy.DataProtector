@@ -13,7 +13,7 @@
 
     <!-- Common -->
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.2" />
         <PackageReference Include="MinVer" Version="7.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,7 +22,7 @@
     
     <!-- ASP.NET 4.x -->
     <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="10.0.1" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="10.0.2" PrivateAssets="all" />
         <PackageReference Include="EntityFramework" Version="6.5.1" />
     </ItemGroup>
 
