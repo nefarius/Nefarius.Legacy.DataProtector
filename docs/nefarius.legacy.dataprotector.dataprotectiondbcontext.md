@@ -5,11 +5,12 @@ Namespace: Nefarius.Legacy.DataProtector
 Data protection database context.
 
 ```csharp
-public class DataProtectionDbContext : Microsoft.EntityFrameworkCore.DbContext, Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure`1[[System.IServiceProvider, System.ComponentModel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a]], Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies, Microsoft.EntityFrameworkCore.Internal.IDbSetCache, Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable, Microsoft.EntityFrameworkCore.Infrastructure.IResettableService, System.IDisposable, System.IAsyncDisposable
+public class DataProtectionDbContext : Microsoft.EntityFrameworkCore.DbContext, Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure<System.IServiceProvider>, Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies, Microsoft.EntityFrameworkCore.Internal.IDbSetCache, Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable, Microsoft.EntityFrameworkCore.Infrastructure.IResettableService, System.IDisposable, System.IAsyncDisposable
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → DbContext → [DataProtectionDbContext](./nefarius.legacy.dataprotector.dataprotectiondbcontext.md)<br>
-Implements IInfrastructure&lt;IServiceProvider&gt;, IDbContextDependencies, IDbSetCache, IDbContextPoolable, IResettableService, [IDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.idisposable), [IAsyncDisposable](https://docs.microsoft.com/en-us/dotnet/api/system.iasyncdisposable)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [DbContext](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontext) → [DataProtectionDbContext](./nefarius.legacy.dataprotector.dataprotectiondbcontext.md)<br>
+Implements [IInfrastructure](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.iinfrastructure-1)<[IServiceProvider](https://learn.microsoft.com/dotnet/api/system.iserviceprovider)>, [IDbContextDependencies](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.internal.idbcontextdependencies), [IDbSetCache](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.internal.idbsetcache), [IDbContextPoolable](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.internal.idbcontextpoolable), [IResettableService](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.iresettableservice), [IDisposable](https://learn.microsoft.com/dotnet/api/system.idisposable), [IAsyncDisposable](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable)<br>
+Attributes [NullableContextAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullablecontextattribute), [NullableAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullableattribute)
 
 ## Properties
 
@@ -21,7 +22,7 @@ public ChangeTracker ChangeTracker { get; }
 
 #### Property Value
 
-ChangeTracker<br>
+[ChangeTracker](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.changetracking.changetracker)<br>
 
 ### <a id="properties-contextid"/>**ContextId**
 
@@ -31,7 +32,7 @@ public DbContextId ContextId { get; }
 
 #### Property Value
 
-DbContextId<br>
+[DbContextId](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextid)<br>
 
 ### <a id="properties-database"/>**Database**
 
@@ -41,7 +42,7 @@ public DatabaseFacade Database { get; }
 
 #### Property Value
 
-DatabaseFacade<br>
+[DatabaseFacade](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.infrastructure.databasefacade)<br>
 
 ### <a id="properties-dataprotectionkeys"/>**DataProtectionKeys**
 
@@ -53,7 +54,7 @@ public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
 #### Property Value
 
-DbSet&lt;DataProtectionKey&gt;<br>
+[DbSet](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbset-1)<[DataProtectionKey](./nefarius.legacy.dataprotector.dataprotectionkey.md)><br>
 
 ### <a id="properties-model"/>**Model**
 
@@ -63,7 +64,7 @@ public IModel Model { get; }
 
 #### Property Value
 
-IModel<br>
+[IModel](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.metadata.imodel)<br>
 
 ## Constructors
 
@@ -75,7 +76,7 @@ public DataProtectionDbContext(DbContextOptions<DataProtectionDbContext> options
 
 #### Parameters
 
-`options` DbContextOptions&lt;DataProtectionDbContext&gt;<br>
+`options` [DbContextOptions](https://learn.microsoft.com/dotnet/api/microsoft.entityframeworkcore.dbcontextoptions-1)<[DataProtectionDbContext](./nefarius.legacy.dataprotector.dataprotectiondbcontext.md)><br>
 
 ## Events
 

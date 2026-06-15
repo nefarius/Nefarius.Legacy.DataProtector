@@ -8,7 +8,8 @@ DB record that represents a stored data protection key.
 public class DataProtectionKey
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [DataProtectionKey](./nefarius.legacy.dataprotector.dataprotectionkey.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [DataProtectionKey](./nefarius.legacy.dataprotector.dataprotectionkey.md)<br>
+Attributes [NullableContextAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullablecontextattribute), [NullableAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.nullableattribute)
 
 ## Properties
 
@@ -22,7 +23,7 @@ public string Id { get; set; }
 
 #### Property Value
 
-[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+[String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 
 ### <a id="properties-lastmodified"/>**LastModified**
 
@@ -34,7 +35,7 @@ public DateTime LastModified { get; set; }
 
 #### Property Value
 
-[DateTime](https://docs.microsoft.com/en-us/dotnet/api/system.datetime)<br>
+[DateTime](https://learn.microsoft.com/dotnet/api/system.datetime)<br>
 
 ### <a id="properties-xmldata"/>**XmlData**
 
@@ -46,7 +47,7 @@ public string XmlData { get; set; }
 
 #### Property Value
 
-[String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+[String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 
 ## Constructors
 

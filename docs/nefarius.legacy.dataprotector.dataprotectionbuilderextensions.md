@@ -2,13 +2,14 @@
 
 Namespace: Nefarius.Legacy.DataProtector
 
-extensions.
+[IDataProtectionBuilder](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.dataprotection.idataprotectionbuilder) extensions.
 
 ```csharp
 public static class DataProtectionBuilderExtensions
 ```
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [DataProtectionBuilderExtensions](./nefarius.legacy.dataprotector.dataprotectionbuilderextensions.md)
+Inheritance [Object](https://learn.microsoft.com/dotnet/api/system.object) → [DataProtectionBuilderExtensions](./nefarius.legacy.dataprotector.dataprotectionbuilderextensions.md)<br>
+Attributes [ExtensionAttribute](https://learn.microsoft.com/dotnet/api/system.runtime.compilerservices.extensionattribute)
 
 ## Methods
 
@@ -22,10 +23,10 @@ public static IDataProtectionBuilder PersistKeysToSqlServer(IDataProtectionBuild
 
 #### Parameters
 
-`builder` IDataProtectionBuilder<br>
+`builder` [IDataProtectionBuilder](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.dataprotection.idataprotectionbuilder)<br>
 
-`connectionString` [String](https://docs.microsoft.com/en-us/dotnet/api/system.string)<br>
+`connectionString` [String](https://learn.microsoft.com/dotnet/api/system.string)<br>
 
 #### Returns
 
-IDataProtectionBuilder
+[IDataProtectionBuilder](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.dataprotection.idataprotectionbuilder)
