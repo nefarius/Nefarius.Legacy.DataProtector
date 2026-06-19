@@ -1,6 +1,6 @@
-CREATE TABLE DataProtectionKeys
+CREATE TABLE [DataProtectionKeys]
 (
-    Id           NVARCHAR(200) PRIMARY KEY,
-    XmlData      NVARCHAR(MAX),
-    LastModified DATETIME DEFAULT GETDATE()
+    [Id]           NVARCHAR(200) NOT NULL PRIMARY KEY,
+    [XmlData]      NVARCHAR(MAX) NULL,
+    [LastModified] DATETIME      NOT NULL DEFAULT (GETUTCDATE())
 );
