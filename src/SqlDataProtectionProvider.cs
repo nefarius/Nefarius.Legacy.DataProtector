@@ -20,8 +20,21 @@ public static class SqlDataProtectionProvider
     /// </summary>
     /// <param name="connectionString">The SQL Server connection string.</param>
     /// <param name="applicationName">The unique name of this application within the data protection system.</param>
-    public static IDataProtectionProvider Create(string connectionString, string applicationName)
+    /// <param name="ensureTableCreated">
+    ///     When <see langword="true" /> (the default), attempts to create the
+    ///     <c>DataProtectionKeys</c> table if it does not already exist. A warning is logged and
+    ///     startup continues if the connection string lacks <c>CREATE TABLE</c> permission.
+    ///     Set to <see langword="false" /> to opt out and manage the schema manually.
+    /// </param>
+    public static IDataProtectionProvider Create(string connectionString, string applicationName,
+        bool ensureTableCreated = true)
     {
+        if (ensureTableCreated)
+        {
+            using DataProtectionDbContext context = new DataProtectionDbContext(connectionString);
+            DataProtectionSchema.EnsureTableExists(context);
+        }
+
         return DataProtectionProvider.Create(
             new DirectoryInfo(
                 /* NOTE: this is just to avoid Argument(Null)Exception, the value is not used */

@@ -35,9 +35,12 @@ instead.
 The example below assumes you have an ASP.NET Core backend playing reverse proxy to a legacy ASP.NET 4.x app
 and share the user session via cookie that gets decrypted via the DB-backed keys.
 
-> [!CAUTION]
-> The table name `DataProtectionKeys` is hard-coded and needs to be created in the target database.
-> See [`SQL_CreateTable.sql`](src/SQL_CreateTable.sql) for details.
+> [!NOTE]
+> The `DataProtectionKeys` table is created automatically on first use when the connection string has
+> `CREATE TABLE` permission. If the table already exists the check is a no-op. If creation fails
+> (e.g. a least-privilege connection string), a warning is written to `System.Diagnostics.Trace` and
+> startup continues. Pass `ensureTableCreated: false` to any entry point to opt out entirely and
+> manage the schema yourself via [`SQL_CreateTable.sql`](src/SQL_CreateTable.sql).
 
 ### ASP.NET Core (.NET 8)
 
@@ -46,7 +49,9 @@ builder.Services.AddDbContext<DataProtectionDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataProtection")));
 
 builder.Services.AddDataProtection()
-    .PersistKeysToSqlServer(builder.Configuration.GetConnectionString("DataProtection")!)    
+    // Table is created automatically if it does not exist and the login has CREATE TABLE permission.
+    // Pass ensureTableCreated: false to opt out.
+    .PersistKeysToSqlServer(builder.Configuration.GetConnectionString("DataProtection")!)
     .SetApplicationName("iis-app-name");
 
 // example to use SSO via shared cookie with ASP.NET 4 
@@ -86,6 +91,8 @@ app.UseCookieAuthentication(new CookieAuthenticationOptions
     ExpireTimeSpan = TimeSpan.FromMinutes(120),
     TicketDataFormat = new AspNetTicketDataFormat(
         new DataProtectorShim(
+            // Table is created automatically if it does not exist and the login has CREATE TABLE permission.
+            // Pass ensureTableCreated: false to opt out.
             SqlDataProtectionProvider.Create(connectionString, "iis-app-name")
                 .CreateProtector(
                     "Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationMiddleware",

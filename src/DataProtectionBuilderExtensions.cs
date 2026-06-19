@@ -18,13 +18,26 @@ public static class DataProtectionBuilderExtensions
     /// <summary>
     ///     Registers the <see cref="EfXmlRepository" /> using EF 6.
     /// </summary>
+    /// <param name="builder">The <see cref="IDataProtectionBuilder" /> to configure.</param>
+    /// <param name="connectionString">The SQL Server connection string.</param>
+    /// <param name="ensureTableCreated">
+    ///     When <see langword="true" /> (the default), attempts to create the
+    ///     <c>DataProtectionKeys</c> table if it does not already exist. A warning is logged and
+    ///     startup continues if the connection string lacks <c>CREATE TABLE</c> permission.
+    ///     Set to <see langword="false" /> to opt out and manage the schema manually.
+    /// </param>
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
-        string connectionString)
+        string connectionString, bool ensureTableCreated = true)
     {
+        if (ensureTableCreated)
+        {
+            using DataProtectionDbContext context = new DataProtectionDbContext(connectionString);
+            DataProtectionSchema.EnsureTableExists(context);
+        }
+
         builder.AddKeyManagementOptions(options =>
         {
-            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(connectionString
-            ));
+            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(connectionString));
         });
 
         return builder;
@@ -43,16 +56,30 @@ public static class DataProtectionBuilderExtensions
     /// <summary>
     ///     Registers the <see cref="EfXmlRepository" /> using EF Core.
     /// </summary>
+    /// <param name="builder">The <see cref="IDataProtectionBuilder" /> to configure.</param>
+    /// <param name="connectionString">The SQL Server connection string.</param>
+    /// <param name="ensureTableCreated">
+    ///     When <see langword="true" /> (the default), attempts to create the
+    ///     <c>DataProtectionKeys</c> table if it does not already exist. A warning is logged and
+    ///     startup continues if the connection string lacks <c>CREATE TABLE</c> permission.
+    ///     Set to <see langword="false" /> to opt out and manage the schema manually.
+    /// </param>
     public static IDataProtectionBuilder PersistKeysToSqlServer(this IDataProtectionBuilder builder,
-        string connectionString)
+        string connectionString, bool ensureTableCreated = true)
     {
-        builder.AddKeyManagementOptions(options =>
+        DbContextOptions<DataProtectionDbContext> options = new DbContextOptionsBuilder<DataProtectionDbContext>()
+            .UseSqlServer(connectionString)
+            .Options;
+
+        if (ensureTableCreated)
         {
-            options.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(
-                new DbContextOptionsBuilder<DataProtectionDbContext>()
-                    .UseSqlServer(connectionString)
-                    .Options
-            ));
+            using DataProtectionDbContext context = new DataProtectionDbContext(options);
+            DataProtectionSchema.EnsureTableExists(context);
+        }
+
+        builder.AddKeyManagementOptions(keyOptions =>
+        {
+            keyOptions.XmlRepository = new EfXmlRepository(() => new DataProtectionDbContext(options));
         });
 
         return builder;
