@@ -38,9 +38,16 @@ and share the user session via cookie that gets decrypted via the DB-backed keys
 > [!NOTE]
 > The `DataProtectionKeys` table is created automatically on first use when the connection string has
 > `CREATE TABLE` permission. If the table already exists the check is a no-op. If creation fails
-> (e.g. a least-privilege connection string), a warning is written to `System.Diagnostics.Trace` and
-> startup continues. Pass `ensureTableCreated: false` to any entry point to opt out entirely and
-> manage the schema yourself via [`SQL_CreateTable.sql`](src/SQL_CreateTable.sql).
+> (e.g. a least-privilege connection string that lacks DDL rights), a warning is emitted at `Warning`
+> level via the application's `ILogger` pipeline (ASP.NET Core resolves the `ILoggerFactory` from DI
+> automatically; on .NET Framework pass an optional `loggerFactory` parameter, otherwise it falls back
+> to `System.Diagnostics.Trace`), and startup continues. This means a missing `CREATE TABLE`
+> permission will now appear in your structured log output rather than being silently discarded.
+>
+> **Recommended for least-privilege logins:** pre-create the table once using
+> [`SQL_CreateTable.sql`](src/SQL_CreateTable.sql), grant the runtime login only
+> `SELECT`, `INSERT`, and `UPDATE` on `dbo.DataProtectionKeys`, then pass
+> `ensureTableCreated: false` to any entry point to opt out of DDL entirely.
 
 ### ASP.NET Core (.NET 8)
 

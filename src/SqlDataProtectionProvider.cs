@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 #if NETFRAMEWORK
 namespace Nefarius.Legacy.DataProtector;
@@ -26,13 +27,19 @@ public static class SqlDataProtectionProvider
     ///     startup continues if the connection string lacks <c>CREATE TABLE</c> permission.
     ///     Set to <see langword="false" /> to opt out and manage the schema manually.
     /// </param>
+    /// <param name="loggerFactory">
+    ///     Optional <see cref="ILoggerFactory" /> used to surface auto-create failures via the
+    ///     application's logger pipeline. When <see langword="null" />, failures fall back to
+    ///     <see cref="System.Diagnostics.Trace" />.
+    /// </param>
     public static IDataProtectionProvider Create(string connectionString, string applicationName,
-        bool ensureTableCreated = true)
+        bool ensureTableCreated = true, ILoggerFactory? loggerFactory = null)
     {
         if (ensureTableCreated)
         {
             using DataProtectionDbContext context = new DataProtectionDbContext(connectionString);
-            DataProtectionSchema.EnsureTableExists(context);
+            DataProtectionSchema.EnsureTableExists(context,
+                loggerFactory?.CreateLogger(typeof(DataProtectionSchema).FullName!));
         }
 
         return DataProtectionProvider.Create(
@@ -48,7 +55,7 @@ public static class SqlDataProtectionProvider
                 builder.Services.Configure<KeyManagementOptions>(options =>
                 {
                     options.XmlRepository = new EfXmlRepository(
-                        () => new DataProtectionDbContext(connectionString));
+                        () => new DataProtectionDbContext(connectionString), loggerFactory);
                 });
             });
     }
