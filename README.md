@@ -49,7 +49,7 @@ and share the user session via cookie that gets decrypted via the DB-backed keys
 > `SELECT`, `INSERT`, and `UPDATE` on `dbo.DataProtectionKeys`, then pass
 > `ensureTableCreated: false` to any entry point to opt out of DDL entirely.
 
-### ASP.NET Core (.NET 8)
+### ASP.NET Core (.NET 8+)
 
 ```csharp
 builder.Services.AddDbContext<DataProtectionDbContext>(options =>
